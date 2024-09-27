@@ -286,7 +286,7 @@ def send_email(request):
         subject,
         body,
         'your-email@gmail.com',  # Your email (sender)
-        ['your-email@gmail.com'],  # Recipient(s)
+        ['kulkarnichaitanya001@gmail.com'],  # Recipient(s)
         reply_to=[email],  # This will set the user's email as the reply-to
     )
 
