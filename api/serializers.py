@@ -91,7 +91,7 @@ class PetPalSerializer(serializers.ModelSerializer):
 
 class DoctorSerializer(serializers.ModelSerializer):
     user = UserSerializer()  # Nested serializer to include user details
-    # id = serializers.IntegerField(read_only=True)  # Corrected the field type
+    id = serializers.IntegerField(read_only=True)  # Corrected the field type
 
     class Meta:
         model = Doctor
