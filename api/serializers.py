@@ -100,6 +100,7 @@ class DoctorSerializer(serializers.ModelSerializer):
 
 class AppointmentSerializer(serializers.ModelSerializer):
     # Make the user field read-only since it's set by the system
+    user_id = serializers.ReadOnlyField(source='user.id')
     user = serializers.ReadOnlyField(source='user.username')
 
     # Use PrimaryKeyRelatedField to allow input for the doctor field

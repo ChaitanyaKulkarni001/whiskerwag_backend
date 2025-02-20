@@ -30,6 +30,7 @@ REST_FRAMEWORK = {
 }
 
 
+
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
@@ -175,6 +176,6 @@ EMAIL_HOST = 'smtp.gmail.com'  # Use the SMTP server of your email provider
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'kulkarnichaitanya001@gmail.com'  # Replace with your email
-EMAIL_HOST_PASSWORD = 'jodj xupr bcaq eowy'  # Replace with your email password or app password
+EMAIL_HOST_PASSWORD = 'uinq tnlb uwlm trca'  # Replace with your email password or app password
 # EMAIL_HOST_PASSWORD = 'Vishnu@WhiskerWag'  # Replace with your email password or app password
 # DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

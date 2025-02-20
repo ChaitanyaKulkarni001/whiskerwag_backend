@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from rest_framework import status
+from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from rest_framework import generics
 from .serializers import UserSerializer,PostSerializer,PetPalSerializer
@@ -20,7 +21,9 @@ from django.contrib.auth.models import User
 
 import random
 from rest_framework.pagination import PageNumberPagination
-
+from django.utils.decorators import method_decorator
+from rest_framework.permissions import IsAuthenticated
+from django.views.decorators.csrf import csrf_exempt
 class CustomPagination(PageNumberPagination):
     page_size = 5
 
@@ -152,15 +155,33 @@ class DoctorViewSet(viewsets.ModelViewSet):
     queryset = Doctor.objects.all()
     permission_classes = [IsAuthenticated]
     serializer_class = DoctorSerializer
-
 class AppointmentViewSet(viewsets.ModelViewSet):
     queryset = Appointment.objects.all()
+    permission_classes = [IsAuthenticated]
     serializer_class = AppointmentSerializer
-    permission_classes = [IsAuthenticated]  # Ensure that only authenticated users can create appointments
+    def create(self, request, *args, **kwargs):
+        try:
+            print("Incoming request data:", request.data)  # Log request data
+            return super().create(request, *args, **kwargs)
+        except Exception as e:
+            print(e)
 
-    def perform_create(self, serializer):
-        # Automatically associate the logged-in user with the appointment
-        serializer.save(user=self.request.user)
+
+# @method_decorator(csrf_exempt, name='dispatch')  # Disables CSRF for this view
+# class AppointmentAPIView(APIView):
+#     permission_classes = [IsAuthenticated]  # Ensure only authenticated users can access
+
+#     def get(self, request):
+#         appointments = Appointment.objects.all()
+#         serializer = AppointmentSerializer(appointments, many=True)
+#         return Response(serializer.data)
+
+#     def post(self, request):
+#         serializer = AppointmentSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save(user=request.user)  # Associate appointment with user
+#             return Response(serializer.data, status=201)
+#         return Response(serializer.errors, status=400)
     
 class GetInfo(generics.ListCreateAPIView):
     serializer_class = DoctorSerializer
@@ -181,14 +202,19 @@ class GetDoc(generics.ListCreateAPIView):
     serializer_class = DoctorSerializer
     permission_classes = [IsAuthenticated]
     queryset = Doctor.objects.all()
-    
-    
-class GetUserInfo(generics.ListAPIView):
-    # queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
     def get_queryset(self):
-        return User.objects.filter(id=self.request.user.id)
+        return Doctor.objects.filter(id=self.request.user.id)
+    
+
+class GetUserInfo(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        """Returns the current authenticated user"""
+        users = User.objects.values("id", "username") 
+        print(users+"users")# Fetch all users' IDs and usernames
+        return Response(users)
+
      
      
 #  Like and unlike the posts
@@ -280,7 +306,7 @@ def send_email(request):
 
     # Send email
     subject = f"New message from {name}"
-    body = f"Message: {message}\n\nFrom: {email}"
+    body = f"Message: {message}\n\nFrom: {email} \n\n WhiskerWag Service"
 
     email_msg = EmailMessage(
         subject,

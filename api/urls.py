@@ -1,7 +1,7 @@
 from django.urls import path,include
 from . import views
 from rest_framework.routers import DefaultRouter
-from .views import DoctorViewSet, AppointmentViewSet,check_doctor_status,GetInfo,GetUserById,GetDoc,GetUserInfo,ProfileUpdateView,UserInformationView
+from .views import DoctorViewSet,check_doctor_status,GetInfo,GetUserById,GetDoc,GetUserInfo,ProfileUpdateView,UserInformationView,AppointmentViewSet
 
 router = DefaultRouter()
 router.register(r'doctors', DoctorViewSet)
@@ -18,6 +18,7 @@ urlpatterns = [
     path('petpal/blogs/',views.PetPalAV.as_view(),name='petpal-list'),
     path('petpal/blogs/delete/<int:pk>/',views.PetPalDeleteAV.as_view(),name='delete-petpal'),
     path('', include(router.urls)),
+    
     path('check-doctor-status/', check_doctor_status),
     path('get_info/', GetInfo.as_view()),
     path('get_user/<int:pk>/', GetUserById.as_view()),
@@ -37,4 +38,5 @@ urlpatterns = [
     path('send-email/', views.send_email, name='send_email'),
     
     path('checkusername/', views.checkUsername.as_view(), name='CheckUsername'),
+    # path('appointments/', AppointmentAPIView.as_view(), name='appointments')
 ]
